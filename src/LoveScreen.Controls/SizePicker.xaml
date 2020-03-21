@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="LoveScreen.Controls.SizePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LoveScreen.Controls"
+             xmlns:convert="clr-namespace:LoveScreen.Controls.Converts"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="100">
+    <UserControl.Resources>
+        <Style TargetType="Rectangle">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="StrokeThickness" Value="1"></Setter>
+                    <Setter Property="Stroke" Value="Gray"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <convert:IntListIndexConvert x:Key="IntListIndexConvert"></convert:IntListIndexConvert>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30" ></ColumnDefinition>
+            <ColumnDefinition Width="30" ></ColumnDefinition>
+            <ColumnDefinition Width="30" ></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Rectangle Margin="4" Stroke="Gray" StrokeThickness="1" Grid.Column="{Binding Path=SelectedSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SizePicker}}, Converter={StaticResource IntListIndexConvert}, ConverterParameter='2,5,8'}"></Rectangle>
+        
+
+        <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Width="2" Height="{Binding Path=Width, RelativeSource={RelativeSource Mode=Self}}" Fill="Black"></Ellipse>
+        <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Width="5" Height="{Binding Path=Width, RelativeSource={RelativeSource Mode=Self}}" Fill="Black"></Ellipse>
+        <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2" Width="8" Height="{Binding Path=Width, RelativeSource={RelativeSource Mode=Self}}" Fill="Black"></Ellipse>
+        <Rectangle Margin="4" MouseDown="Ellipse_MouseDown" Tag="2" Grid.Column="0" Fill="Transparent"></Rectangle>
+        <Rectangle Margin="4" MouseDown="Ellipse_MouseDown" Tag="5" Grid.Column="1" Fill="Transparent"></Rectangle>
+        <Rectangle Margin="4" MouseDown="Ellipse_MouseDown" Tag="8" Grid.Column="2" Fill="Transparent"></Rectangle>
+    </Grid>
+</UserControl>

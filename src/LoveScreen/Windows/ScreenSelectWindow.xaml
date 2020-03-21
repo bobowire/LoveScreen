@@ -1,0 +1,116 @@
+﻿<Window 
+        x:Name="window"
+        x:Class="LoveScreen.Windows.ScreenSelectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoveScreen.Windows"
+        xmlns:controls="clr-namespace:LoveScreen.Controls;assembly=LoveScreen.Controls"
+        xmlns:convert="clr-namespace:LoveScreen.Controls.Converts;assembly=LoveScreen.Controls"
+        mc:Ignorable="d"
+        Title="ScreenSelectWindow" Height="450" Width="800"
+        WindowStyle="None" ResizeMode="NoResize"
+        MouseMove="window_MouseMove"
+        MouseUp="window_MouseUp"
+        ShowInTaskbar="False"
+        >
+    <Window.Resources>
+        <convert:WidthHeightToRectConvert x:Key="WidthHeightToRectConvert"></convert:WidthHeightToRectConvert>
+        <convert:RectToMarginConvert x:Key="RectToMarginConvert"></convert:RectToMarginConvert>
+        <convert:ToolsMarginConvert x:Key="ToolsMarginConvert"></convert:ToolsMarginConvert>
+        <convert:IsVisibilityConvert x:Key="IsVisibilityConvert"></convert:IsVisibilityConvert>
+    </Window.Resources>
+    <Grid DataContext="{Binding ElementName=window}">
+        <!--背景图-->
+        <Image x:Name="BackgroundImg"></Image>
+        <!--画图区域-->
+        <controls:ExtendedInkCanvas x:Name="inkCanvas" HorizontalAlignment="Left" VerticalAlignment="Top"
+                   Margin="{Binding Path=HightLightRect, Converter={StaticResource RectToMarginConvert}}"
+                   Width="{Binding Path=HightLightRect.Width}"
+                   Height="{Binding Path=HightLightRect.Height}"
+                   PreviewMouseDown ="inkCanvas_PreviewMouseDown"
+                   >
+            <controls:ExtendedInkCanvas.Background>
+                <ImageBrush ImageSource="{Binding Path=Source, ElementName=BackgroundImg}" Viewbox="{Binding Path=HightLightRect}"></ImageBrush>
+            </controls:ExtendedInkCanvas.Background>
+        </controls:ExtendedInkCanvas>
+        <!--黑色遮罩-->
+        <Path Fill="Black" Opacity="0.7" x:Name="outterFrame" MouseDown="outterFrame_MouseDown" MouseMove="outterFrame_MouseMove">
+            <Path.Data>
+                <CombinedGeometry GeometryCombineMode="Exclude">
+                    <CombinedGeometry.Geometry1>
+                        <RectangleGeometry>
+                            <RectangleGeometry.Rect>
+                                <MultiBinding Converter="{StaticResource WidthHeightToRectConvert}">
+                                    <Binding Path="ActualWidth"></Binding>
+                                    <Binding Path="ActualHeight"></Binding>
+                                </MultiBinding>
+                            </RectangleGeometry.Rect>
+                        </RectangleGeometry>
+                    </CombinedGeometry.Geometry1>
+                    <CombinedGeometry.Geometry2>
+                        <RectangleGeometry Rect="{Binding Path=HightLightRect}"></RectangleGeometry>
+                    </CombinedGeometry.Geometry2>
+                </CombinedGeometry>
+            </Path.Data>
+        </Path>
+        <!--选择框 白色-->
+        <Path Stroke="White" StrokeThickness="2" >
+            <Path.Data>
+                <RectangleGeometry Rect="{Binding Path=HightLightRect}"></RectangleGeometry>
+            </Path.Data>
+        </Path>
+        <!--选择框 黑色-->
+        <Path Stroke="Black" StrokeThickness="2" StrokeDashArray="5 5">
+            <Path.Data>
+                <RectangleGeometry Rect="{Binding Path=HightLightRect }" ></RectangleGeometry>
+            </Path.Data>
+        </Path>
+        <!--选择框 透明-->
+        <Path Stroke="Transparent" x:Name="innerFrame" StrokeThickness="10" MouseDown="innerFrame_MouseDown" MouseMove="innerFrame_MouseMove" MouseUp="innerFrame_MouseUp" Cursor="{Binding Path=InnerRectCursor}">
+            <Path.Data>
+                <RectangleGeometry Rect="{Binding Path=HightLightRect }" ></RectangleGeometry>
+            </Path.Data>
+        </Path>
+        <!--工具栏-->
+        <controls:ImageEditTool x:Name="imageEditTool" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding Path=InnerFrameMode, Converter={StaticResource IsVisibilityConvert}, ConverterParameter=4}">
+            <controls:ImageEditTool.Margin>
+                <MultiBinding Converter="{StaticResource ToolsMarginConvert}">
+                    <Binding Path="HightLightRect"></Binding>
+                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}"></Binding>
+                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"></Binding>
+                    <Binding Path="ActualWidth"></Binding>
+                    <Binding Path="ActualHeight"></Binding>
+                </MultiBinding>
+            </controls:ImageEditTool.Margin>
+        </controls:ImageEditTool>
+        <!--放大镜-->
+        <Canvas x:Name="HelpCanvas" Width="150" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="{Binding Path=HelpRectMargin}" Visibility="{Binding Path=InnerFrameMode, Converter={StaticResource IsVisibilityConvert}, ConverterParameter=1 3}">
+            <Ellipse Width="{Binding Path=Width, ElementName=HelpCanvas}" Height="{Binding Path=Width, ElementName=HelpCanvas}">
+                <Ellipse.Fill>
+                    <VisualBrush Visual="{Binding ElementName=BackgroundImg}" RenderOptions.BitmapScalingMode="NearestNeighbor" Viewbox="{Binding Path=HelpImageRect}"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Path Width="{Binding Path=Width, ElementName=HelpCanvas}" Height="{Binding Path=Height, ElementName=HelpCanvas}" Stroke="Black" StrokeThickness="10" Opacity="0.5">
+                <Path.Data>
+                    <GeometryGroup>
+                        <LineGeometry StartPoint="0,75" EndPoint="150,75" />
+                        <LineGeometry StartPoint="75,0" EndPoint="75,150" />
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+            <Path Width="{Binding Path=Width, ElementName=HelpCanvas}" Height="{Binding Path=Height, ElementName=HelpCanvas}" Stroke="White" StrokeThickness="10" StrokeDashArray="2 2" Opacity="0.5">
+                <Path.Data>
+                    <GeometryGroup>
+                        <LineGeometry StartPoint="0,75" EndPoint="150,75" />
+                        <LineGeometry StartPoint="75,0" EndPoint="75,150" />
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+            <Ellipse Width="{Binding Path=Width, ElementName=HelpCanvas}" Height="{Binding Path=Width, ElementName=HelpCanvas}" StrokeThickness="2" Stroke="Red"></Ellipse>
+
+            <TextBox Background="Black" Height="25" Foreground="White" Text="{Binding Path=PixInfoStr}" Canvas.Bottom="0" Canvas.Left="0" Width="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+        </Canvas>
+    </Grid>
+</Window>

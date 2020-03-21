@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="LoveScreen.Controls.ImageEditTool"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LoveScreen.Controls"
+             xmlns:convert ="clr-namespace:LoveScreen.Controls.Converts"
+             mc:Ignorable="d" 
+             d:DesignHeight="70" d:DesignWidth="400">
+    <UserControl.Resources>
+        <convert:ObjectToIntConvert x:Key="ObjectToIntConvert"></convert:ObjectToIntConvert>
+        <Style TargetType="Rectangle" x:Key="DrawModeRectStyle">
+            <Setter Property="Fill" Value="Transparent"></Setter>
+            <EventSetter Event="MouseDown" Handler="Rectangle_MouseDown">
+            </EventSetter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Stroke" Value="Gray"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="34"></RowDefinition>
+            <RowDefinition Height="34"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Background="White" Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="34"></ColumnDefinition>
+                <ColumnDefinition Width="34"></ColumnDefinition>
+                <ColumnDefinition Width="34"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Column="{Binding DrawModeStyle, Converter={StaticResource ObjectToIntConvert}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ImageEditTool}}}" Stroke="Gray" Width="28" Height="28"  VerticalAlignment="Center" HorizontalAlignment="Center" ></Rectangle>
+
+
+
+            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Stroke="Black" StrokeThickness="1" ></Rectangle>
+            <Ellipse Grid.Column="1" Stroke="Black" StrokeThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="20" Height="20"/>
+            <TextBlock Grid.Column="2" Text="P" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="28"></TextBlock>
+
+            <Rectangle Style="{StaticResource DrawModeRectStyle}" Tag="0" ToolTip="矩形"  Grid.Column="0" Width="28" Height="28"  VerticalAlignment="Center" HorizontalAlignment="Center"></Rectangle>
+            <Rectangle Style="{StaticResource DrawModeRectStyle}" Tag="1" ToolTip="圆形"  Grid.Column="1" Width="28" Height="28"  VerticalAlignment="Center" HorizontalAlignment="Center"></Rectangle>
+            <Rectangle Style="{StaticResource DrawModeRectStyle}" ToolTip="画笔" Tag="2" Grid.Column="2" Width="28" Height="28"  VerticalAlignment="Center" HorizontalAlignment="Center"></Rectangle>
+            <local:ImgButton Grid.Column="3" Width="30" Content="" ToolTip="长截图"  FontSize="16" Click="LongScreenButton_Click" BackgroundImage="Resource/longscreen.png"/>
+            <local:ImgButton Grid.Column="4" Width="30" Content="" ToolTip="GIF动图"  FontSize="16" Click="RecordButton_Click" BackgroundImage="Resource/record.png"/>
+            <local:ImgButton Grid.Column="5" Width="30" Content="" ToolTip="贴图"  FontSize="16" Click="TopButton_Click" BackgroundImage="Resource/toppost.png"/>
+            <local:ImgButton Grid.Column="6" Width="30" FontSize="16" BackgroundImage="Resource/close.png" Click="CancelButton_Click"/>
+            <local:ImgButton Grid.Column="7" Width="60" Content="确定"  FontSize="16" BackgroundImage="Resource/ok.png" Click="OkButton_Click"/>
+        </Grid>
+        <ItemsControl Grid.Row="1" Margin="2" Background="White" HorizontalAlignment="Left">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"></StackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <local:SizePicker VerticalAlignment="Center"></local:SizePicker>
+            <local:ColorPicker></local:ColorPicker>
+        </ItemsControl>
+    </Grid>
+</UserControl>

@@ -1,0 +1,41 @@
+﻿<Window 
+        x:Name="window"
+        x:Class="LoveScreen.Windows.LongScreenWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoveScreen.Windows"
+        xmlns:convert="clr-namespace:LoveScreen.Controls.Converts;assembly=LoveScreen.Controls"
+        xmlns:controls="clr-namespace:LoveScreen.Controls;assembly=LoveScreen.Controls"
+        mc:Ignorable="d"
+        Title="LongScreenWindow" MinHeight="50" MinWidth="200" 
+        WindowStyle="None"
+	    AllowsTransparency="True"
+        Topmost="True"
+	    Background="Transparent" 
+    >
+
+    <Window.Resources>
+        <convert:WidthHeightToRectConvert x:Key="WidthHeightToRectConvert"></convert:WidthHeightToRectConvert>
+        <convert:DoubleCalcConvert x:Key="DoubleCalcConvert"></convert:DoubleCalcConvert>
+    </Window.Resources>
+    <Grid DataContext="{Binding ElementName=window }" Margin="0">
+
+        <!--白色框-->
+        <Rectangle Stroke="White" StrokeThickness="2" Margin="1 1 1 1"></Rectangle>
+
+        <!--黑色框-->
+        <Rectangle x:Name="C_FrameRect" StrokeDashArray="5 5" StrokeThickness="2" Stroke="Black" Margin="1 1 1 1"></Rectangle>
+
+        <!--文本-->
+        <controls:TextBlockFrame MouseDown="TextBlockFrame_MouseDown" Cursor="Hand" FontWeight="Bold" FontSize="24" Text="点击此处或F2截图" Background="#01FFFFFF" BorderBrush="White" Fill="Black"></controls:TextBlockFrame>
+
+        <controls:ImgButton Width="60" Margin="0,0,80,8" FontSize="16" BackgroundImage="/LoveScreen.Controls;component/Resource/close.png" Background="White" Content="取消" Command="ApplicationCommands.Close" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+        <controls:ImgButton Width="60" Margin="8" Background="White" BackgroundImage="/LoveScreen.Controls;component/Resource/ok.png" Content="确定"  FontSize="16"  Click="OkButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+
+        <!--透明边框，用于移动-->
+        <Rectangle x:Name="C_SizeFrame" Stroke="#01FFFFFF" StrokeThickness="12" MouseDown="Path_MouseDown" MouseMove="Path_MouseMove" MouseUp="Path_MouseUp" Cursor="SizeAll" ></Rectangle>
+
+    </Grid>
+</Window>
